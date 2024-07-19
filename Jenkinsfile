@@ -3,7 +3,7 @@ pipeline {
 	stages {
 		stage('Checkout SCM') {
 			steps {
-				checkout scm
+				git 'https://github.com/nicsng/dependency-check-plugin.git'
 			}
 		}
 
