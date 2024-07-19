@@ -1,4 +1,21 @@
-#!/usr/bin/env groovy
+pipeline {
+	agent any
+	stages {
+		stage('Checkout SCM') {
+			steps {
+				git '/home/JenkinsDependencyCheckTest'
+			}
+		}
 
-/* `buildPlugin` step provided by: https://github.com/jenkins-infra/pipeline-library */
-buildPlugin(jdkVersions: [21, 17])
+		stage('OWASP DependencyCheck') {
+			steps {
+				dependencyCheck additionalArguments: '--format HTML --format XML', odcInstallation: 'Default'
+			}
+		}
+	}	
+	post {
+		success {
+			dependencyCheckPublisher pattern: 'dependency-check-report.xml'
+		}
+	}
+}
